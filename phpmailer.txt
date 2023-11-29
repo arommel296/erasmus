@@ -1,0 +1,2 @@
+name:phpmailer
+pass:ifrd yeic yfiv twoo
