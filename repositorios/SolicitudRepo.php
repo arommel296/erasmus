@@ -1,6 +1,6 @@
 <?php
 
-class SolicitudRepo implements methodDB{
+class SolicitudRepo implements dbInterface{
     private $conex;
     private $errores=[];
 
@@ -18,7 +18,7 @@ class SolicitudRepo implements methodDB{
             if ($registro) {
                 $solicitud = new Solicitud($registro['id'], $registro['dni'], $registro['nombre'], $registro['apellidos'], $registro['curso'], $registro['telefono'], $registro['correo'],
                 $registro['fechaNac'], $registro['domicilio'], $registro['dniTutor'], $registro['nombreTutor'], $registro['apellidosTutor'], $registro['domicilioTutor'],
-                $registro['telefonoTutor'], $registro['pass'], $registro['idConvocatoria']);
+                $registro['telefonoTutor'], $registro['pass'], $registro['idConvocatoria'], $registro['imagen']);
                 return $solicitud;
             }
         } 
@@ -46,7 +46,7 @@ class SolicitudRepo implements methodDB{
             if ($registro){
                 $solicitud = new Solicitud($registro['id'], $registro['dni'], $registro['nombre'], $registro['apellidos'], $registro['curso'], $registro['telefono'], $registro['correo'],
                 $registro['fechaNac'], $registro['domicilio'], $registro['dniTutor'], $registro['nombreTutor'], $registro['apellidosTutor'], $registro['domicilioTutor'],
-                $registro['telefonoTutor'], $registro['pass'], $registro['idConvocatoria']);
+                $registro['telefonoTutor'], $registro['pass'], $registro['idConvocatoria'], $registro['imagen']);
                 return $solicitud;
             }   
         }
@@ -81,12 +81,12 @@ class SolicitudRepo implements methodDB{
     function update($object){
         $sql = "UPDATE solicitud set dni = :dni, nombre = :nombre, apellidos = :apellidos, curso = :curso, telefono = :telefono, correo = :correo, fechaNac = :fechaNac,
         domicilio = :domicilio, dniTutor = :dniTutor, nombreTutor = :nombreTutor, apellidosTutor = :apellidosTutor, domicilioTutor = :domicilioTutor,
-        telefonoTutor = :telefonoTutor, pass = :pass, idConvocatoria = :idConvocatoria where id=:id";
+        telefonoTutor = :telefonoTutor, pass = :pass, idConvocatoria = :idConvocatoria, imagen = :imagen where id=:id";
         $statement = $this->conex->prepare($sql);
         $statement->execute([':nombre' => $object->getNombre(), ':dni' => $object->getDni(), ':apellidos' => $object->getApellidos(), ':curso' => $object->getCurso(),
         ':telefono' => $object->getTelefono(), ':correo' => $object->getCorreo(), ':fechaNac' => $object->getFechaNac(), ':domicilio' => $object->getDomicilio(),
         ':dniTutor' => $object->getDniTutor(), ':nombreTutor' => $object->getNombreTutor(), ':apellidosTutor' => $object->getApellidosTutor(), ':domicilioTutor' => $object->getDomicilioTutor(),
-        ':telefonoTutor' => $object->getTelefonoTutor(), ':pass' => $object->getPass(), ':idConvocatoria' => $object->getIdConvocatoria(), ':id' => $object->getId()]);
+        ':telefonoTutor' => $object->getTelefonoTutor(), ':pass' => $object->getPass(), ':idConvocatoria' => $object->getIdConvocatoria(), ':imagen' => $object->getImagen(), ':id' => $object->getId()]);
         if ($this->conex!=null) {
             return $statement->rowCount();
         } else {
@@ -96,13 +96,13 @@ class SolicitudRepo implements methodDB{
     
     function insert($object){
         $sql = "INSERT into solicitud(dni, nombre, apellidos, curso, telefono, correo, fechaNac, domicilio, dniTutor, nombreTutor, apellidosTutor, domicilioTutor, telefonoTutor, pass,
-        idConvocatoria) values(:dni, :nombre, :apellidos, :curso, :telefono, :correo, :fechaNac, :domicilio, :dniTutor, :nombreTutor, :apellidosTutor, :domicilioTutor, :telefonoTutor,
-        :pass, :idConvocatoria)";
+        idConvocatoria, imagen) values(:dni, :nombre, :apellidos, :curso, :telefono, :correo, :fechaNac, :domicilio, :dniTutor, :nombreTutor, :apellidosTutor, :domicilioTutor, :telefonoTutor,
+        :pass, :idConvocatoria, imagen)";
         $statement = $this->conex->prepare($sql);
         $statement->execute([':nombre' => $object->getNombre(), ':dni' => $object->getDni(), ':apellidos' => $object->getApellidos(), ':curso' => $object->getCurso(),
         ':telefono' => $object->getTelefono(), ':correo' => $object->getCorreo(), ':fechaNac' => $object->getFechaNac(), ':domicilio' => $object->getDomicilio(),
         ':dniTutor' => $object->getDniTutor(), ':nombreTutor' => $object->getNombreTutor(), ':apellidosTutor' => $object->getApellidosTutor(), ':domicilioTutor' => $object->getDomicilioTutor(),
-        ':telefonoTutor' => $object->getTelefonoTutor(), ':pass' => $object->getPass(), ':idConvocatoria' => $object->getIdConvocatoria(), ':id' => $object->getId()]);
+        ':telefonoTutor' => $object->getTelefonoTutor(), ':pass' => $object->getPass(), ':idConvocatoria' => $object->getIdConvocatoria(), ':imagen' => $object->getImagen(), ':id' => $object->getId()]);
         if ($this->conex!=null) {
             return $statement->rowCount();
         } else {

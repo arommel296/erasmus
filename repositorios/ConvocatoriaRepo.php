@@ -1,6 +1,6 @@
 <?php
 
-class ConvocatoriaRepo implements methodDB{
+class ConvocatoriaRepo implements dbInterface{
     private $conex;
     private $errores=[];
 
@@ -24,9 +24,51 @@ class ConvocatoriaRepo implements methodDB{
         return null;
     }
     
+    // function findAll(){
+    //     $sql = "SELECT * FROM convocatoria";
+    //     $statement = $this->conex->prepare($sql);
+    //     $statement->execute();
+    //     if ($this->conex!=null) {
+    //         $registro = $statement->fetchAll(PDO::FETCH_ASSOC);
+    //         return $registro;
+    //     }
+    //     return null;
+    // }
+
     function findAll(){
         $sql = "SELECT * FROM convocatoria";
         $statement = $this->conex->prepare($sql);
+        $statement->execute();
+        $convocatorias = [];
+    
+        if ($this->conex != null) {
+            while ($registro = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $convocatoria = new Convocatoria(
+                    $registro['id'],
+                    $registro['movilidades'],
+                    $registro['duracion'],
+                    $registro['tipo'],
+                    $registro['inicioSolicitud'],
+                    $registro['finSolicitud'],
+                    $registro['inicioPrueba'],
+                    $registro['finPrueba'],
+                    $registro['listaProv'],
+                    $registro['listaDef'],
+                    $registro['codigoProyecto'],
+                    $registro['destinos']
+                );
+                $convocatorias[] = $convocatoria;
+            }
+        }
+    
+        return $convocatorias;
+    }
+
+
+    function findAllByDate($fecha){
+        $sql = "SELECT * FROM convocatoria WHERE fecha >= :fecha";
+        $statement = $this->conex->prepare($sql);
+        $statement->bindParam(':fecha',$fecha);
         $statement->execute();
         if ($this->conex!=null) {
             $registro = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -34,6 +76,7 @@ class ConvocatoriaRepo implements methodDB{
         }
         return null;
     }
+
 
     function findByName($name) {
         //Si no lo pongo me da error.
@@ -92,6 +135,73 @@ class ConvocatoriaRepo implements methodDB{
         } else {
             return false;
         }
+    }
+
+    function transaction($convocatoria, $convocatoriaBaremo){
+        try {
+            $this->conex->beginTransaction();
+    
+            $sql = "INSERT INTO convocatoria (movilidades, duracion, tipo, inicioSolicitud, finSolicitud, inicioPrueba, finPrueba, listaProv, listaDef, codigoProyecto, destinos)
+                    VALUES (:movilidades, :duracion, :tipo, :inicioSolicitud, :finSolicitud, :inicioPrueba, :finPrueba, :listaProv, :listaDef, :codigoProyecto, :destinos)";
+            $statement = $this->conex->prepare($sql);
+            $statement->execute([
+                ':movilidades' => $convocatoria->getMovilidades(),
+                ':duracion' => $convocatoria->getDuracion(),
+                ':tipo' => $convocatoria->getTipo(),
+                ':inicioSolicitud' => $convocatoria->getInicioSolicitud(),
+                ':finSolicitud' => $convocatoria->getFinSolicitud(),
+                ':inicioPrueba' => $convocatoria->getInicioPrueba(),
+                ':finPrueba' => $convocatoria->getFinPrueba(),
+                ':listaProv' => $convocatoria->getListaProv(),
+                ':listaDef' => $convocatoria->getListaDef(),
+                ':codigoProyecto' => $convocatoria->getCodigoProyecto(),
+                ':destinos' => $convocatoria->getDestinos()
+            ]);
+    
+            $lastId = $this->conex->lastInsertId();
+    
+            $sql = "INSERT INTO convocatoria-baremo (idConvocatoria, idItem, puntuacionMax, valorMin, aportaAlumno) 
+                    VALUES (:idConvocatoria, :idItem, :puntuacionMax, :valorMin, :aportaAlumno)";
+            $statement = $this->conex->prepare($sql);
+            $statement->execute([
+                ':idConvocatoria' => $lastId,
+                ':idItem' => $convocatoriaBaremo->getIdItem(),
+                ':puntuacionMax' => $convocatoriaBaremo->getPuntuacionMax(),
+                ':valorMin' => $convocatoriaBaremo->getValorMin(),
+                ':aportaAlumno' => $convocatoriaBaremo->getAportaAlumno()
+            ]);
+
+            $sql = "INSERT INTO destinatario-convocatoria (idConvocatoria, idDestinatario) 
+                    VALUES (:idConvocatoria, :idDestinatario)";
+            $statement = $this->conex->prepare($sql);
+            $statement->execute([
+                ':idConvocatoria' => $lastId,
+                ':idDestinatario' => $convocatoriaBaremo->getIdDestinatario()
+            ]);
+    
+            $sql = "INSERT INTO convocatoria-baremo-idioma (idConvocatoria, idNivel) 
+                    VALUES (:idConvocatoria, :idNivel)";
+            $statement = $this->conex->prepare($sql);
+            $statement->execute([
+                ':idConvocatoria' => $lastId,
+                ':idDestinatario' => $convocatoriaBaremo->getIdDestinatario()
+            ]);
+
+            $sql = "INSERT INTO baremacion (idConvocatoria, idNivel) 
+            VALUES (:idConvocatoria, :idNivel)";
+            $statement = $this->conex->prepare($sql);
+            $statement->execute([
+                ':idConvocatoria' => $lastId,
+                ':idDestinatario' => $convocatoriaBaremo->getIdDestinatario()
+            ]);
+
+
+            $this->conex->commit();
+    
+        } catch (Exception $e) {
+            $this->conex->rollBack();
+        }
+
     }
     
 

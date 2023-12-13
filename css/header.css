@@ -1,0 +1,85 @@
+.hoverMenu{
+    color: black;
+    display: none;
+}
+
+.examinar:hover .hoverMenu{
+    color:brown;
+    display: flex;
+}
+
+/* ------------   nuevo ---------*/
+
+.menu {
+    display: flex;
+    width: 80%;
+    align-self: center;
+    height: fit-content;
+    font-size: large;
+}
+
+.ul {
+    display: block;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.li {
+    list-style: none;
+    display: block;
+    margin-right: 10px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: white;
+    display: block;
+    padding: 10px;
+}
+
+/* Dropdown */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    padding: 8px;
+    display: none;
+    position: absolute;
+    background-color: rgb(174, 196, 255);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1; /*para mostrar por encima del resto de elementos*/
+}
+
+.dropdown-content li{
+    display: block;
+}
+
+.dropdown-content li:hover{
+    font-weight: bold;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* .logout {
+    font-size: medium;
+    height: 100%;
+    width: 15%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.logout a{
+    text-decoration: none;
+    color: white;
+    justify-self: center;
+    align-self: center;
+}
+
+.logout a:hover{
+   text-decoration: underline;
+} */

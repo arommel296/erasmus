@@ -1,6 +1,6 @@
 <?php
 
-class Convocatoria{
+class Convocatoria implements JsonSerializable{
     private $id;
     private $movilidades;
     private $duracion;
@@ -125,6 +125,11 @@ class Convocatoria{
 
     public function setDestinos($destinos) {
         $this->destinos = $destinos;
+    }
+
+    public function jsonSerialize(){
+        $vars = get_object_vars($this);
+        return $vars;
     }
 
 }

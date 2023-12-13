@@ -1,0 +1,41 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.formulario {
+    padding-top: 25px;
+    width: 600px;
+    margin: 0 auto;
+}
+
+.formulario .fila {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.formulario .fila .campo {
+    width: 45%;
+}
+
+.formulario label {
+    display: block;
+}
+
+.formulario input[type="text"], .formulario input[type="email"], .formulario input[type="date"], .formulario input[type="number"], .formulario input[type="password"] {
+    width: 100%;
+    padding: 5px;
+}
+
+.formulario input[type="submit"] {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.formulario input[type="submit"]:hover {
+    background-color: #45a049;
+}

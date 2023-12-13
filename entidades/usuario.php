@@ -1,17 +1,17 @@
 <?php
 
-class Destinatario implements JsonSerializable{
-    private $codigoGrupo;
+class usuario implements JsonSerializable{
     private $nombre;
-
-    public function __construct($codigoGrupo, $nombre) {
-        $this->codigoGrupo = $codigoGrupo;
+    private $pass;
+    
+    public function __construct($nombre, $pass) {
+        $this->pass = $pass;
         $this->nombre = $nombre;
     }
 
     // Getters
-    public function getCodigoGrupo() {
-        return $this->codigoGrupo;
+    public function getpass() {
+        return $this->pass;
     }
 
     public function getNombre() {
@@ -19,8 +19,8 @@ class Destinatario implements JsonSerializable{
     }
 
     // Setters
-    public function setCodigoGrupo($codigoGrupo) {
-        $this->codigoGrupo = $codigoGrupo;
+    public function setpass($pass) {
+        $this->pass = $pass;
     }
 
     public function setNombre($nombre) {

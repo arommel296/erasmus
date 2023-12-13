@@ -1,31 +1,30 @@
 <?php
 
-
-class ItemBaremable implements JsonSerializable{
+class NivelIdioma implements JsonSerializable{
     private $id;
-    private $nombre;
+    private $nivel;
 
-    public function __construct($id, $nombre){
+    public function __construct($id, $nivel) {
         $this->id = $id;
-        $this->nombre = $nombre;
+        $this->nivel = $nivel;
     }
 
-    //Getters
+    // Getters
     public function getId() {
         return $this->id;
     }
 
-    public function getNombre() {
-        return $this->nombre;
+    public function getNivel() {
+        return $this->nivel;
     }
 
-    //Setters
+    // Setters
     public function setId($id) {
         $this->id = $id;
     }
 
-    public function setNombre($nombre) {
-        $this->nombre = $nombre;
+    public function setNivel($nivel) {
+        $this->nivel = $nivel;
     }
 
     public function jsonSerialize(){

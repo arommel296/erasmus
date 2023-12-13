@@ -1,24 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/solicitud.css">
+    <link rel="stylesheet" href="../css/header1.css">
+    <script type="module" src="../js/recuadro.js"></script>
+    <script type="module" src="../js/solicitud.js"></script>
     <title>Solicitud</title>
 </head>
+
 <body>
-    <label for="dni"><input type="text" name="dni" id="dni"></label>
-    <label for="nombre"><input type="text" name="nombre" id="nombre"></label>
-    <label for="apellidos"><input type="text" name="apellidos" id="apellidos"></label>
-    <label for="correo"><input type="text" name="correo" id="correo"></label>
-    <label for="telefono"><input type="text" name="telefono" id="telefono"></label>
-    <label for="curso"><input type="text" name="curso" id="curso"></label>
-    <label for="fechaNac"><input type="date" name="fechaNac" id="fechaNac"></label>
-    <label for="domicilio"><input type="text" name="domicilio" id="domicilio"></label>
-    <label for="dniTutor"><input type="text" name="dniTutor" id="dniTutor"></label>
-    <label for="nombreTutor"><input type="text" name="nombreTutor" id="nombreTutor"></label>
-    <label for="apellidosTutor"><input type="text" name="apellidosTutor" id="apellidosTutor"></label>
-    <label for="telefonoTutor"><input type="text" name="telefonoTutor" id="telefonoTutor"></label>
-    <label for="domicilioTutor"><input type="text" name="domicilioTutor" id="domicilioTutor"></label>
-    <label for=""></label>
+    <header>
+        <a href="?menu=inicio" tabindex="1">
+            <img src="../imagenes/logoFuentezuelasBlanco.png" alt="INICIO" width="20%" height="20%">
+        </a>
+    </header>
+    <form action="" method="post" class="formulario">
+        <div class="fila">
+            <div class="campo">
+                <label for="dni">DNI:</label>
+                <input type="text" id="dni" name="dni" maxlength="9">
+            </div>
+            <div class="campo">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" maxlength="50">
+            </div>
+        </div>
+        <div class="fila">
+            <div class="campo">
+                <label for="apellidos">Apellidos:</label>
+                <input type="text" id="apellidos" name="apellidos" maxlength="50">
+            </div>
+            <div class="campo">
+                <label for="curso">Curso:</label>
+                <input type="text" id="curso" name="curso" maxlength="100">
+            </div>
+        </div>
+        <div class="fila">
+            <div class="campo">
+                <label for="telefono">Teléfono:</label>
+                <input type="text" id="telefono" name="telefono" maxlength="9">
+            </div>
+            <div class="campo">
+                <label for="correo">Correo:</label>
+                <input type="email" id="correo" name="correo" maxlength="50">
+            </div>
+        </div>
+        <div class="fila">
+            <div class="campo">
+                <label for="fechaNac">Fecha de Nacimiento:</label>
+                <input type="date" id="fechaNac" name="fechaNac">
+            </div>
+            <div class="campo">
+                <label for="domicilio">Domicilio:</label>
+                <input type="text" id="domicilio" name="domicilio" maxlength="100">
+            </div>
+        </div>
+        <div class="fila">
+            <div class="campo">
+                <label for="dniTutor">DNI Tutor:</label>
+                <input type="text" id="dniTutor" name="dniTutor" maxlength="9">
+            </div>
+            <div class="campo">
+                <label for="nombreTutor">Nombre Tutor:</label>
+                <input type="text" id="nombreTutor" name="nombreTutor" maxlength="100">
+            </div>
+        </div>
+        <div class="fila">
+            <div class="campo">
+                <label for="apellidosTutor">Apellidos Tutor:</label>
+                <input type="text" id="apellidosTutor" name="apellidosTutor" maxlength="100">
+            </div>
+            <div class="campo">
+                <label for="telefonoTutor">Teléfono Tutor:</label>
+                <input type="text" id="telefonoTutor" name="telefonoTutor" maxlength="9">
+            </div>
+        </div>
+        <div class="fila">
+            <div class="campo">
+                <label for="domicilioTutor">Domicilio Tutor:</label>
+                <input type="text" id="domicilioTutor" name="domicilioTutor" maxlength="100">
+            </div>
+            <div class="campo">
+                <label for="id">Id Solicitud:</label>
+                <input type="number" id="id" name="id" min="1" max="99999">
+            </div>
+        </div>
+        <div class="fila">
+            <div class="campo">
+                <label for="pass">Contraseña:</label>
+                <input type="password" id="pass" name="pass" maxlength="30">
+            </div>
+            <div class="campo">
+                <label for="idConvocatoria">ID Convocatoria:</label>
+                <input type="number" id="idConvocatoria" name="idConvocatoria" min="1" max="99999">
+            </div>
+        </div>
+        <div class="fila">
+            <div class="campo">
+                <label for="imagen">Subir Imagen:</label>
+                <input type="file" accept="image/*" id="imagen" name="imagen">
+            </div>
+            <div class="campo">
+                <label for="imagen">Capturar Imagen:</label>
+                <img src="" alt="" id="foto">
+                <button id="capturar">Capturar Imagen</button>
+            </div>
+        </div>
+        <div class="fila">
+            <div class="campo">
+                <input type="submit" value="Enviar">
+            </div>
+        </div>
+    </form>
 </body>
+
 </html>

@@ -1,7 +1,7 @@
 <?php
 
 
-class Solicitud{
+class Solicitud implements JsonSerializable{
     private $id;
     private $dni;
     private $nombre;
@@ -18,8 +18,9 @@ class Solicitud{
     private $telefonoTutor;
     private $pass;
     private $idConvocatoria;
+    private $imagen;
 
-    public function __construct($id, $dni, $nombre, $apellidos, $curso, $telefono, $correo, $fechaNac, $domicilio, $dniTutor, $nombreTutor, $apellidosTutor, $domicilioTutor, $telefonoTutor, $pass, $idConvocatoria) {
+    public function __construct($id, $dni, $nombre, $apellidos, $curso, $telefono, $correo, $fechaNac, $domicilio, $dniTutor, $nombreTutor, $apellidosTutor, $domicilioTutor, $telefonoTutor, $pass, $idConvocatoria, $imagen) {
         $this->id = $id;
         $this->dni = $dni;
         $this->nombre = $nombre;
@@ -36,6 +37,7 @@ class Solicitud{
         $this->telefonoTutor = $telefonoTutor;
         $this->pass = $pass;
         $this->idConvocatoria = $idConvocatoria;
+        $this->imagen = $imagen;
     }
 
     // Getters
@@ -103,6 +105,10 @@ class Solicitud{
         return $this->idConvocatoria;
     }
 
+    public function getImagen() {
+        return $this->imagen;
+    }
+
     // Setters
     public function setId($id) {
         $this->id = $id;
@@ -166,6 +172,15 @@ class Solicitud{
 
     public function setIdConvocatoria($idConvocatoria) {
         $this->idConvocatoria = $idConvocatoria;
+    }
+
+    public function setImagen($imagen) {
+        $this->imagen = $imagen;
+    }
+
+    public function jsonSerialize(){
+        $vars = get_object_vars($this);
+        return $vars;
     }
 
 }

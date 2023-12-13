@@ -1,19 +1,21 @@
 <?php
 
 
-class Baremacion{
+class Baremacion implements JsonSerializable{
     private $idSolicitud;
     private $idBaremo;
     private $idConvocatoria;
     private $rutaFichero;
-    private $baremacion;
+    private $baremoProvisional;
+    private $baremoDefinitivo;
 
-    public function __construct($idSolicitud, $idBaremo, $idConvocatoria, $rutaFichero, $baremacion){
+    public function __construct($idSolicitud, $idBaremo, $idConvocatoria, $rutaFichero, $baremoProvisional, $baremoDefinitivo){
         $this->idSolicitud = $idSolicitud;
         $this->idBaremo = $idBaremo;
         $this->idConvocatoria = $idConvocatoria;
         $this->rutaFichero = $rutaFichero;
-        $this->baremacion = $baremacion;
+        $this->baremoProvisional = $baremoProvisional;
+        $this->baremoDefinitivo = $baremoDefinitivo;
     }
 
     //Getters
@@ -33,8 +35,12 @@ class Baremacion{
         return $this->rutaFichero;
     }
 
-    public function getBaremacion() {
-        return $this->baremacion;
+    public function getBaremoProvisional() {
+        return $this->baremoProvisional;
+    }
+
+    public function getBaremoDefinitivo() {
+        return $this->baremoDefinitivo;
     }
 
     //Setters
@@ -54,7 +60,16 @@ class Baremacion{
         $this->rutaFichero = $rutaFichero;
     }
 
-    public function setBaremacion($baremacion) {
-        $this->baremacion = $baremacion;
+    public function setBaremoProvisional($baremoProvisional) {
+        $this->baremoProvisional = $baremoProvisional;
+    }
+
+    public function setbaremoDefinitivo($baremoDefinitivo) {
+        $this->baremoDefinitivo = $baremoDefinitivo;
+    }
+
+    public function jsonSerialize(){
+        $vars = get_object_vars($this);
+        return $vars;
     }
 }
