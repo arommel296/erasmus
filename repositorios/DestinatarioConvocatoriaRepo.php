@@ -10,7 +10,7 @@ class DestinatarioConvocatoriaRepo implements dbInterface {
     }
 
     public function findById($idConvocatoria, $idDestinatario) {
-        $sql = "SELECT * FROM destinatario_convocatoria WHERE idConvocatoria = :idConvocatoria AND idDestinatario = :idDestinatario";
+        $sql = "SELECT * FROM `destinatario-convocatoria` WHERE idConvocatoria = :idConvocatoria AND idDestinatario = :idDestinatario";
         $stmt = $this->conex->prepare($sql);
         $variables = [
             ':idConvocatoria' => $idConvocatoria,
@@ -28,7 +28,7 @@ class DestinatarioConvocatoriaRepo implements dbInterface {
     }
 
     public function findAll() {
-        $sql = "SELECT * FROM destinatario_convocatoria";
+        $sql = "SELECT * FROM `destinatario-convocatoria`";
         $stmt = $this->conex->prepare($sql);
         $stmt->execute();
         $destinatariosConvocatoria = [];
@@ -41,8 +41,38 @@ class DestinatarioConvocatoriaRepo implements dbInterface {
         return $destinatariosConvocatoria;
     }
 
+    public function findAllByDestinatario($destinatario) {
+        $sql = "SELECT c.* FROM convocatoria c
+        JOIN `destinatario-convocatoria` dc ON c.id = dc.idConvocatoria
+        WHERE dc.idDestinatario = :destinatario";
+
+        $stmt = $this->conex->prepare($sql);
+        $stmt->bindParam(':destinatario', $destinatario);
+        $stmt->execute();
+
+        $convocatorias = [];
+        while ($registro = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $convocatorias[] = new Convocatoria(
+                $registro['id'],
+                $registro['movilidades'],
+                $registro['duracion'],
+                $registro['tipo'],
+                $registro['inicioSolicitud'],
+                $registro['finSolicitud'],
+                $registro['inicioPrueba'],
+                $registro['finPrueba'],
+                $registro['listaProv'],
+                $registro['listaDef'],
+                $registro['codigoProyecto'],
+                $registro['destinos']
+            );
+        }
+
+        return $convocatorias;
+    }
+
     public function deleteById($idConvocatoria, $idDestinatario) {
-        $sql = "DELETE FROM destinatario_convocatoria WHERE idConvocatoria = :idConvocatoria AND idDestinatario = :idDestinatario";
+        $sql = "DELETE FROM `destinatario-convocatoria` WHERE idConvocatoria = :idConvocatoria AND idDestinatario = :idDestinatario";
         $stmt = $this->conex->prepare($sql);
         $variables = [
             ':idConvocatoria' => $idConvocatoria,
@@ -64,7 +94,7 @@ class DestinatarioConvocatoriaRepo implements dbInterface {
     }
 
     public function update($object) {
-        $sql = "UPDATE destinatario_convocatoria SET idConvocatoria = :idConvocatoria WHERE idDestinatario = :idDestinatario";
+        $sql = "UPDATE `destinatario-convocatoria` SET idConvocatoria = :idConvocatoria WHERE idDestinatario = :idDestinatario";
         $stmt = $this->conex->prepare($sql);
         $variables = [
             ':idConvocatoria' => $object->getIdConvocatoria(),
@@ -74,7 +104,7 @@ class DestinatarioConvocatoriaRepo implements dbInterface {
     }
 
     public function insert($object) {
-        $sql = "INSERT INTO destinatario_convocatoria (idConvocatoria, idDestinatario) VALUES (:idConvocatoria, :idDestinatario)";
+        $sql = "INSERT INTO `destinatario-convocatoria` (idConvocatoria, idDestinatario) VALUES (:idConvocatoria, :idDestinatario)";
         $stmt = $this->conex->prepare($sql);
         $variables = [
             ':idConvocatoria' => $object->getIdConvocatoria(),

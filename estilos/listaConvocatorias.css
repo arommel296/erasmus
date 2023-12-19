@@ -1,0 +1,83 @@
+tbody tr:hover{
+    cursor: pointer;
+    background: radial-gradient(circle at center, rgb(163, 200, 255), rgb(201, 230, 255));
+}
+
+.scroll {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    overflow-y: auto;
+    height: 80vh;
+}
+
+main{
+    display: grid;
+    grid-template-columns: 80%;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+}
+
+h1{
+    text-align: center;
+    width: 100%;
+}
+
+/*Sacado de internet, solo he cambiado colores, ancho y alguna cosa más*/
+/* Estilo para el scroll */
+.scroll::-webkit-scrollbar {
+    padding-right: 5px;
+    width: 8px; /* Ancho del scroll */
+}
+
+.scroll::-webkit-scrollbar-track {
+    background: transparent; /* Color de fondo del scroll */
+}
+
+.scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(101, 163, 255, 0.7); /* Color del scroll */
+    border-radius: 10px; /* Radio de la esquina del scroll */
+    border: transparent; /* Borde del scroll */
+}
+
+.scroll::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(101, 163, 255, 0.7); /* Color del scroll al pasar el ratón */
+}
+
+/* Estilo para esconder la barra de desplazamiento cuando no se está utilizando */
+.scroll:hover::-webkit-scrollbar-thumb {
+    background-color: rgb(101, 163, 255, 0.7);
+}
+
+.scroll::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+
+td a{
+    width: 40%;
+    border-radius: 5px;
+    border: 1px solid gray;
+    background-color:rgba(169, 204, 255, 0.7);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+td a:hover{
+    background-color:rgba(101, 163, 255, 0.7);
+}
+
+tr td:last-child{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#selectGrupo{
+    width: 20%;
+    text-align: center;
+}
+
+label{
+    text-align: center;
+}
+

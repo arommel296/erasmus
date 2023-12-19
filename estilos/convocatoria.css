@@ -1,62 +1,29 @@
-form {
-    display: grid;
-    grid-template-columns: 40% 40%;
-    gap: 20px;
+.listadoC{
+    border: 1px solid white;
+    border-radius: 10px;
+    overflow-y: auto;
+    height: 450px;
+    /* padding-top: 25px;*/
+    margin: 10px;
+    margin-top: 19px; 
 }
 
-#id, #itembaremable, #puntuacionMax, #valorMin, #aportaAlumno {
-    display: none;
+.listadoC p{
+    padding-left: 15px;
 }
-/* .right {
-    grid-column: 2;
-} */
 
-body form{
-    justify-content: center;
+tr{
+    cursor: pointer;
+}
+
+tr:hover{
+    background: radial-gradient(circle at center, rgb(163, 200, 255), rgb(201, 230, 255));
+}
+
+.itemB{
+    background-color: rgb(169, 213, 252);
 }
 
 .escondido{
     display: none;
-}
-
-input, label, option, label{
-    width: 273px;
-    height: 25px;
-    line-height: 25px;
-    padding: 2px;
-    margin: 5px;
-}
-
-select {
-    width: 281px;
-    height: 33px;
-    line-height: 33px;
-    padding: 2px;
-    margin: 5px;
-}
-
-input[type="text"], input[type="number"]{
-    width: 273px;
-}
-
-.izq, .dcha{
-    width: 100%;
-}
-
-.izq{
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    background-color: rgb(22, 88, 145);
-}
-
-.dcha{
-    align-content: center;
-    align-items: center;
-    justify-content: center;
-    background-color:bisque;
-}
-
-#codigoProyecto{
-    padding: none;
 }

@@ -20,7 +20,7 @@ class ConvocatoriaBaremoIdioma implements JsonSerializable{
         return $this->idNivel;
     }
 
-    public function getPuntuconNivel() {
+    public function getPuntuacionNivel() {
         return $this->puntuacionNivel;
     }
 

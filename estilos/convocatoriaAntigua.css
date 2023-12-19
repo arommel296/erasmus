@@ -1,0 +1,62 @@
+form {
+    display: grid;
+    grid-template-columns: 40% 40%;
+    gap: 20px;
+}
+
+#id, #itembaremable, #puntuacionMax, #valorMin, #aportaAlumno {
+    display: none;
+}
+/* .right {
+    grid-column: 2;
+} */
+
+body form{
+    justify-content: center;
+}
+
+.escondido{
+    display: none;
+}
+
+input, label, option, label{
+    width: 273px;
+    height: 25px;
+    line-height: 25px;
+    padding: 2px;
+    margin: 5px;
+}
+
+select {
+    width: 281px;
+    height: 33px;
+    line-height: 33px;
+    padding: 2px;
+    margin: 5px;
+}
+
+input[type="text"], input[type="number"]{
+    width: 273px;
+}
+
+.izq, .dcha{
+    width: 100%;
+}
+
+.izq{
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(22, 88, 145);
+}
+
+.dcha{
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    background-color:bisque;
+}
+
+#codigoProyecto{
+    padding: none;
+}

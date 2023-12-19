@@ -10,7 +10,7 @@ class ConvocatoriaBaremoRepo implements dbInterface {
     }
 
     public function findByIdConvocatoriaAndItem($idConvocatoria, $idItem) {
-        $sql = "SELECT * FROM convocatoria-baremo WHERE idConvocatoria = :idConvocatoria AND idItem = :idItem";
+        $sql = "SELECT * FROM `convocatoria-baremo` WHERE idConvocatoria = :idConvocatoria AND idItem = :idItem";
         $stmt = $this->conex->prepare($sql);
         $variables = [
             ':idConvocatoria' => $idConvocatoria,
@@ -30,8 +30,39 @@ class ConvocatoriaBaremoRepo implements dbInterface {
         return null;
     }
 
+    public function findByIdConvocatoria($idConvocatoria) {
+        $sql = "SELECT itembaremable.id, itembaremable.nombre
+        FROM `convocatoria-baremo`
+        JOIN itembaremable ON `convocatoria-baremo`.idItem = itembaremable.id
+        WHERE `convocatoria-baremo`.idConvocatoria = :idConvocatoria AND `convocatoria-baremo`.aportaAlumno = 'SI'";
+        $stmt = $this->conex->prepare($sql);
+        $variables = [
+            ':idConvocatoria' => $idConvocatoria
+        ];
+        $stmt->execute($variables);
+        $itemsBaremables = [];
+        while ($registro = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $itemsBaremables[] = new ItemBaremable(
+                $registro['id'],
+                $registro['nombre']
+            );
+        }
+        return $itemsBaremables;
+        // $convocatoriasBaremo = [];
+        // while ($registro = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        //     $convocatoriasBaremo[] = new ConvocatoriaBaremo(
+        //         $registro['idConvocatoria'],
+        //         $registro['idItem'],
+        //         $registro['puntuacionMax'],
+        //         $registro['valorMin'],
+        //         $registro['aportaAlumno']
+        //     );
+        // }
+        // return $convocatoriasBaremo;
+    }
+
     public function findAll() {
-        $sql = "SELECT * FROM convocatoria-baremo";
+        $sql = "SELECT * FROM `convocatoria-baremo`";
         $stmt = $this->conex->prepare($sql);
         $stmt->execute();
         $convocatoriasBaremo = [];
@@ -48,7 +79,7 @@ class ConvocatoriaBaremoRepo implements dbInterface {
     }
 
     public function deleteByIdConvocatoriaAndItem($idConvocatoria, $idItem) {
-        $sql = "DELETE FROM convocatoria-baremo WHERE idConvocatoria = :idConvocatoria AND idItem = :idItem";
+        $sql = "DELETE FROM `convocatoria-baremo` WHERE idConvocatoria = :idConvocatoria AND idItem = :idItem";
         $stmt = $this->conex->prepare($sql);
         $variables = [
             ':idConvocatoria' => $idConvocatoria,
@@ -70,7 +101,7 @@ class ConvocatoriaBaremoRepo implements dbInterface {
     }
 
     public function update($object) {
-        $sql = "UPDATE convocatoria-baremo SET 
+        $sql = "UPDATE `convocatoria-baremo` SET 
             puntuacionMax = :puntuacionMax,
             valorMin = :valorMin,
             aportaAlumno = :aportaAlumno
@@ -87,7 +118,7 @@ class ConvocatoriaBaremoRepo implements dbInterface {
     }
 
     public function insert($object) {
-        $sql = "INSERT INTO convocatoria-baremo (idConvocatoria, idItem, puntuacionMax, valorMin, aportaAlumno) 
+        $sql = "INSERT INTO `convocatoria-baremo` (idConvocatoria, idItem, puntuacionMax, valorMin, aportaAlumno) 
             VALUES (:idConvocatoria, :idItem, :puntuacionMax, :valorMin, :aportaAlumno)";
         $stmt = $this->conex->prepare($sql);
         $variables = [

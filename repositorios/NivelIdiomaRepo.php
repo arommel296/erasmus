@@ -10,7 +10,7 @@ class NivelIdiomaRepo implements dbInterface {
     }
 
     public function findById($id) {
-        $sql = "SELECT * FROM nivel-idioma WHERE id = :id";
+        $sql = "SELECT * FROM `nivel-idioma` WHERE id = :id";
         $stmt = $this->conex->prepare($sql);
         $variables = [
             ':id' => $id
@@ -27,7 +27,7 @@ class NivelIdiomaRepo implements dbInterface {
     }
 
     public function findAll() {
-        $sql = "SELECT * FROM nivel-idioma";
+        $sql = "SELECT * FROM `nivel-idioma`";
         $stmt = $this->conex->prepare($sql);
         $stmt->execute();
         $nivelesIdioma = [];
@@ -41,7 +41,7 @@ class NivelIdiomaRepo implements dbInterface {
     }
 
     public function deleteById($id) {
-        $sql = "DELETE FROM nivel-idioma WHERE id = :id";
+        $sql = "DELETE FROM `nivel-idioma` WHERE id = :id";
         $stmt = $this->conex->prepare($sql);
         $variables = [
             ':id' => $id
@@ -62,7 +62,7 @@ class NivelIdiomaRepo implements dbInterface {
     }
 
     public function update($object) {
-        $sql = "UPDATE nivel-idioma SET nivel = :nivel WHERE id = :id";
+        $sql = "UPDATE `nivel-idioma` SET nivel = :nivel WHERE id = :id";
         $stmt = $this->conex->prepare($sql);
         $variables = [
             ':id' => $object->getId(),
@@ -72,7 +72,7 @@ class NivelIdiomaRepo implements dbInterface {
     }
 
     public function insert($object) {
-        $sql = "INSERT INTO nivel-idioma (id, nivel) VALUES (:id, :nivel)";
+        $sql = "INSERT INTO `nivel-idioma` (id, nivel) VALUES (:id, :nivel)";
         $stmt = $this->conex->prepare($sql);
         $variables = [
             ':id' => $object->getId(),

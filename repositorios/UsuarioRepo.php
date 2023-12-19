@@ -26,6 +26,25 @@ class UsuarioRepo implements dbInterface {
         return null;
     }
 
+    function findByNamePass($nombre, $pass){
+        $sql = "SELECT * FROM usuario WHERE nombre=:nombre AND pass=:contra";
+        $statement = $this->conex->prepare($sql);
+        $statement->bindParam(':nombre', $nombre);
+        $statement->bindParam(':contra', $pass);
+        $statement->execute();
+        if ($this->conex!=null) {
+            $registro = $statement->fetch(PDO::FETCH_ASSOC);
+
+            if ($registro){
+                $usuario = new Usuario($registro['nombre'], $registro['pass']);
+
+                return $usuario;
+            }
+        } 
+        echo json_encode(null);
+        return null; //devuelve null solo si no hay conexión y si no se encuentra un registro con el nombre proporcionado en la base de datos
+    }
+
     public function findAll() {
         $sql = "SELECT * FROM usuario";
         $stmt = $this->conex->prepare($sql);

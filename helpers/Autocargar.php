@@ -18,6 +18,8 @@ class Autocargar{
             $carpeta=$_SERVER['DOCUMENT_ROOT']."/DEWESE/erasmus/vistas/login".$clase.".php";
         }else if(file_exists($_SERVER['DOCUMENT_ROOT']."/DEWESE/erasmus/vistas/principal".$clase.".php")){
             $carpeta=$_SERVER['DOCUMENT_ROOT']."/DEWESE/erasmus/vistas/principal".$clase.".php";
+        }else if(file_exists($_SERVER['DOCUMENT_ROOT']."/DEWESE/erasmus/vistas/admin".$clase.".php")){
+            $carpeta=$_SERVER['DOCUMENT_ROOT']."/DEWESE/erasmus/vistas/admin".$clase.".php";
         }
         //echo $carpeta;
         if ($carpeta != "") {

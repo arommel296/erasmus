@@ -1,0 +1,58 @@
+/* Para las primeras 3 filas */
+#listadoConvoc tbody tr:nth-child(-n+3) {
+    /* background-color: lightgreen; */
+    background: radial-gradient(circle at 50% 50%, lightgreen 80%, rgb(201, 230, 255) 100%);
+    /* background-color: rgb(171, 243, 171);  */
+}
+
+/* Para las últimas 2 filas */
+#listadoConvoc tbody tr:nth-last-child(-n+2) {
+    /* background-color: rgb(155, 158, 168);  */
+    background: radial-gradient(circle at 50% 50%, rgb(167, 167, 167) 80%, rgb(201, 230, 255) 100%);
+    /* background-color: rgb(167, 167, 167); */
+}
+
+/* Para las filas restantes */
+#listadoConvoc tbody tr:not(:nth-child(-n+3)):not(:nth-last-child(-n+2)) {
+    /* background-color: rgb(255, 232, 189);  */
+    background: radial-gradient(circle at 50% 50%, rgb(238, 232, 144) 80%, rgb(201, 230, 255) 100%);
+    /* background-color: rgb(238, 232, 144); */
+}
+
+#leyenda{
+    display: flex;
+    justify-content: space-around;
+}
+
+main{
+    display: grid;
+    grid-template-columns: 80%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.suplentes{
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 3px;
+    background-color: rgb(238, 232, 144);
+}
+
+.excluidos{
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 3px;
+    background-color: rgb(167, 167, 167);
+}
+
+.becados{
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 3px;
+    background-color: lightgreen;
+    /* background-color: rgb(171, 243, 171);  */
+}

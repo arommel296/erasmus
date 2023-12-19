@@ -10,7 +10,7 @@ class ConvocatoriaBaremoIdiomaRepo implements dbInterface {
     }
 
     public function findByIdConvocatoriaAndNivel($idConvocatoria, $idNivel) {
-        $sql = "SELECT * FROM convocatoria-baremo-idioma WHERE idConvocatoria = :idConvocatoria AND idNivel = :idNivel";
+        $sql = "SELECT * FROM `convocatoria-baremo-idioma` WHERE idConvocatoria = :idConvocatoria AND idNivel = :idNivel";
         $stmt = $this->conex->prepare($sql);
         $variables = [
             ':idConvocatoria' => $idConvocatoria,
@@ -29,7 +29,7 @@ class ConvocatoriaBaremoIdiomaRepo implements dbInterface {
     }
 
     public function findAll() {
-        $sql = "SELECT * FROM convocatoria-baremo-idioma";
+        $sql = "SELECT * FROM `convocatoria-baremo-idioma`";
         $stmt = $this->conex->prepare($sql);
         $stmt->execute();
         $convocatoriasBaremo = [];
@@ -44,7 +44,7 @@ class ConvocatoriaBaremoIdiomaRepo implements dbInterface {
     }
 
     public function deleteByIdConvocatoriaAndNivel($idConvocatoria, $idNivel) {
-        $sql = "DELETE FROM convocatoria-baremo-idioma WHERE idConvocatoria = :idConvocatoria AND idNivel = :idNivel";
+        $sql = "DELETE FROM `convocatoria-baremo-idioma` WHERE idConvocatoria = :idConvocatoria AND idNivel = :idNivel";
         $stmt = $this->conex->prepare($sql);
         $variables = [
             ':idConvocatoria' => $idConvocatoria,
@@ -66,7 +66,7 @@ class ConvocatoriaBaremoIdiomaRepo implements dbInterface {
     }
 
     public function update($object) {
-        $sql = "UPDATE convocatoria-baremo-idioma SET 
+        $sql = "UPDATE `convocatoria-baremo-idioma` SET 
             puntuacionNivel = :puntuacionNivel
             WHERE idConvocatoria = :idConvocatoria AND idNivel = :idNivel";
         $stmt = $this->conex->prepare($sql);
@@ -79,7 +79,7 @@ class ConvocatoriaBaremoIdiomaRepo implements dbInterface {
     }
 
     public function insert($object) {
-        $sql = "INSERT INTO convocatoria-baremo-idioma (idConvocatoria, idNivel, puntuacionNivel) 
+        $sql = "INSERT INTO `convocatoria-baremo-idioma` (idConvocatoria, idNivel, puntuacionNivel) 
             VALUES (:idConvocatoria, :idNivel, :puntuacionNivel)";
         $stmt = $this->conex->prepare($sql);
         $variables = [

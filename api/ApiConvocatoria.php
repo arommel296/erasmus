@@ -1,44 +1,44 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT']."/DEWESE/erasmus/helpers/Autocargar.php";
-$repo=new SolicitudRepo();
+$repo=new ConvocatoriaRepo();
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     if (isset($_GET[''])) {
-        if($_GET['menu'] == "examenManual" || $_GET['menu'] == "nuevasolicitud") {
+        if($_GET['menu'] == "examenManual" || $_GET['menu'] == "nuevaconvocatoria") {
             $resultado = $repo->findAll();
-            $solicitudes=[];
-            foreach($resultado as $solicitud){
-                $solicitudes[]=$solicitud;
+            $convocatoriaes=[];
+            foreach($resultado as $convocatoria){
+                $convocatoriaes[]=$convocatoria;
             }
             header('Content-Type: application/json');
-            echo json_encode($solicitudes);
+            echo json_encode($convocatoriaes);
         }
     }
 }elseif($_SERVER["REQUEST_METHOD"] == "POST"){
     if (isset($_POST)) {
         $datosPreg=file_get_contents("php://input");
-        $solicitud=json_decode($datosPreg, true);
+        $convocatoria=json_decode($datosPreg, true);
 
-        $id = $solicitud['id'];
-        $dni = $solicitud['dni'];
-        $nombre = $solicitud['nombre'];
-        $apellidos = $solicitud['apellidos'];
-        $curso = $solicitud['curso'];
-        $telefono = $solicitud['telefono'];
-        $correo = $solicitud['correo'];
-        $fechaNac = $solicitud['fechaNac'];
-        $domicilio = $solicitud['domicilio'];
-        $dniTutor = $solicitud['dniTutor'];
-        $nombreTutor = $solicitud['nombreTutor'];
-        $apellidosTutor = $solicitud['apellidosTutor'];
-        $telefonoTutor = $solicitud['telefonoTutor'];
-        $domicilioTutor = $solicitud['domicilioTutor'];
-        $pass = $solicitud['pass'];
-        $idConvocatoria = $solicitud['idConvocatoria'];
-        $imagen = $solicitud['imagen'];
+        $id = $convocatoria['id'];
+        $movilidades = $convocatoria['movilidades'];
+        $duracion = $convocatoria['duracion'];
+        $tipo = $convocatoria['tipo'];
+        $codigoProyecto = $convocatoria['codigoProyecto'];
+        $destinos = $convocatoria['destinos'];
+        $inicioSolicitud = $convocatoria['inicioSolicitud'];
+        $finSolicitud = $convocatoria['finSolicitud'];
+        $inicioPrueba = $convocatoria['inicioPrueba'];
+        $finPrueba = $convocatoria['finPrueba'];
+        $listaProv = $convocatoria['listaProv'];
+        $listaDef = $convocatoria['listaDef'];
 
-        $solicitudG = new Solicitud($id, $dni, $nombre, $apellidos, $curso, $telefono, $correo, $fechaNac, $domicilio, $dniTutor, $nombreTutor, $apellidosTutor, $telefonoTutor, $domicilioTutor, $pass, $idConvocatoria, $imagen);
+        $finSolicitudTutor = $convocatoria['finSolicitudTutor'];
+        $pass = $convocatoria['pass'];
+        $idConvocatoria = $convocatoria['idConvocatoria'];
+        $imagen = $convocatoria['imagen'];
 
-        $resultado = $repo->save($solicitudG);
+        $convocatoriaG = new convocatoria($id, $movilidades, $duracion, $tipo, $inicioSolicitud, $finSolicitud, $inicioPrueba, $finPrueba, $listaProv, $listaDef, $codigoProyecto, $destinos);
+
+        $resultado = $repo->save($convocatoriaG);
         // header('Content-Type: application/json');
         http_response_code(200);
         echo json_encode($resultado);

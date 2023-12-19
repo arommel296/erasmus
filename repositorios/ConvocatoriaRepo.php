@@ -66,7 +66,7 @@ class ConvocatoriaRepo implements dbInterface{
 
 
     function findAllByDate($fecha){
-        $sql = "SELECT * FROM convocatoria WHERE fecha >= :fecha";
+        $sql = "SELECT * FROM convocatoria WHERE inicioSolicitud >= :fecha";
         $statement = $this->conex->prepare($sql);
         $statement->bindParam(':fecha',$fecha);
         $statement->execute();
@@ -76,6 +76,38 @@ class ConvocatoriaRepo implements dbInterface{
         }
         return null;
     }
+
+    function findAllDisponibles(){
+        $hoy = date("y/m/d");
+        $sql = "SELECT * FROM convocatoria WHERE inicioSolicitud >= :fecha";
+        $statement = $this->conex->prepare($sql);
+        $statement->bindParam(':fecha', $hoy);
+        $statement->execute();
+        $convocatorias = [];
+    
+        if ($this->conex != null) {
+            while ($registro = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $convocatoria = new Convocatoria(
+                    $registro['id'],
+                    $registro['movilidades'],
+                    $registro['duracion'],
+                    $registro['tipo'],
+                    $registro['inicioSolicitud'],
+                    $registro['finSolicitud'],
+                    $registro['inicioPrueba'],
+                    $registro['finPrueba'],
+                    $registro['listaProv'],
+                    $registro['listaDef'],
+                    $registro['codigoProyecto'],
+                    $registro['destinos']
+                );
+                $convocatorias[] = $convocatoria;
+            }
+        }
+    
+        return $convocatorias;
+    }
+
 
 
     function findByName($name) {
@@ -137,11 +169,13 @@ class ConvocatoriaRepo implements dbInterface{
         }
     }
 
-    function transaction($convocatoria, $convocatoriaBaremo){
+
+    function transaction($convocatoria, $convocBaremo, $destinatarios, $nivelIdioma){
         try {
             $this->conex->beginTransaction();
     
-            $sql = "INSERT INTO convocatoria (movilidades, duracion, tipo, inicioSolicitud, finSolicitud, inicioPrueba, finPrueba, listaProv, listaDef, codigoProyecto, destinos)
+            // Insertar en la tabla convocatoria
+            $sql = "INSERT INTO `convocatoria` (movilidades, duracion, tipo, inicioSolicitud, finSolicitud, inicioPrueba, finPrueba, listaProv, listaDef, codigoProyecto, destinos)
                     VALUES (:movilidades, :duracion, :tipo, :inicioSolicitud, :finSolicitud, :inicioPrueba, :finPrueba, :listaProv, :listaDef, :codigoProyecto, :destinos)";
             $statement = $this->conex->prepare($sql);
             $statement->execute([
@@ -160,49 +194,51 @@ class ConvocatoriaRepo implements dbInterface{
     
             $lastId = $this->conex->lastInsertId();
     
-            $sql = "INSERT INTO convocatoria-baremo (idConvocatoria, idItem, puntuacionMax, valorMin, aportaAlumno) 
-                    VALUES (:idConvocatoria, :idItem, :puntuacionMax, :valorMin, :aportaAlumno)";
-            $statement = $this->conex->prepare($sql);
-            $statement->execute([
-                ':idConvocatoria' => $lastId,
-                ':idItem' => $convocatoriaBaremo->getIdItem(),
-                ':puntuacionMax' => $convocatoriaBaremo->getPuntuacionMax(),
-                ':valorMin' => $convocatoriaBaremo->getValorMin(),
-                ':aportaAlumno' => $convocatoriaBaremo->getAportaAlumno()
-            ]);
-
-            $sql = "INSERT INTO destinatario-convocatoria (idConvocatoria, idDestinatario) 
-                    VALUES (:idConvocatoria, :idDestinatario)";
-            $statement = $this->conex->prepare($sql);
-            $statement->execute([
-                ':idConvocatoria' => $lastId,
-                ':idDestinatario' => $convocatoriaBaremo->getIdDestinatario()
-            ]);
+            // Insertar en la tabla convocatoria-baremo
+            foreach($convocBaremo as $itemBaremable) {
+                $sql = "INSERT INTO `convocatoria-baremo` (idConvocatoria, idItem, puntuacionMax, valorMin, aportaAlumno) 
+                        VALUES (:idConvocatoria, :idItem, :puntuacionMax, :valorMin, :aportaAlumno)";
+                $statement = $this->conex->prepare($sql);
+                $statement->execute([
+                    ':idConvocatoria' => $lastId,
+                    ':idItem' => $itemBaremable->getIdItem(),
+                    ':puntuacionMax' => $itemBaremable->getPuntuacionMax(),
+                    ':valorMin' => $itemBaremable->getValorMin(),
+                    ':aportaAlumno' => $itemBaremable->getAportaAlumno()
+                ]);
+            }
     
-            $sql = "INSERT INTO convocatoria-baremo-idioma (idConvocatoria, idNivel) 
-                    VALUES (:idConvocatoria, :idNivel)";
-            $statement = $this->conex->prepare($sql);
-            $statement->execute([
-                ':idConvocatoria' => $lastId,
-                ':idDestinatario' => $convocatoriaBaremo->getIdDestinatario()
-            ]);
-
-            $sql = "INSERT INTO baremacion (idConvocatoria, idNivel) 
-            VALUES (:idConvocatoria, :idNivel)";
-            $statement = $this->conex->prepare($sql);
-            $statement->execute([
-                ':idConvocatoria' => $lastId,
-                ':idDestinatario' => $convocatoriaBaremo->getIdDestinatario()
-            ]);
-
-
+            // Insertar en la tabla destinatario-convocatoria
+            foreach($destinatarios as $grupo) {
+                $sql = "INSERT INTO `destinatario-convocatoria` (idConvocatoria, idDestinatario) 
+                        VALUES (:idConvocatoria, :idDestinatario)";
+                $statement = $this->conex->prepare($sql);
+                $statement->execute([
+                    ':idConvocatoria' => $lastId,
+                    ':idDestinatario' => $grupo->getIdDestinatario()
+                ]);
+            }
+    
+            // Insertar en la tabla convocatoria-baremo-idioma
+            foreach($nivelIdioma as $convoBareIdioma) {
+                $sql = "INSERT INTO `convocatoria-baremo-idioma` (idConvocatoria, idNivel, PuntuacionNivel) 
+                        VALUES (:idConvocatoria, :idNivel, :puntuacionNivel)";
+                $statement = $this->conex->prepare($sql);
+                $statement->execute([
+                    ':idConvocatoria' => $lastId,
+                    ':idNivel' => $convoBareIdioma->getIdNivel(),
+                    ':puntuacionNivel' => $convoBareIdioma->getPuntuacionNivel()
+                ]);
+            }
+    
             $this->conex->commit();
     
         } catch (Exception $e) {
+            echo $e->getMessage();
             $this->conex->rollBack();
         }
-
     }
+    
     
 
 }

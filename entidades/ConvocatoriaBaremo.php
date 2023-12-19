@@ -20,7 +20,7 @@ class ConvocatoriaBaremo implements JsonSerializable{
         return $this->idConvocatoria;
     }
 
-    public function getidItem() {
+    public function getIdItem() {
         return $this->idItem;
     }
 
@@ -42,7 +42,7 @@ class ConvocatoriaBaremo implements JsonSerializable{
         $this->idConvocatoria = $idConvocatoria;
     }
 
-    public function setidItem($idItem) {
+    public function setIdItem($idItem) {
         $this->idItem = $idItem;
     }
 

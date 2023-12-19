@@ -1,0 +1,134 @@
+body{
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    background-color: rgb(201, 230, 255);
+}
+
+header{
+    background-color: rgb(101, 163, 255);
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+img{
+    padding-top: 5px;
+    width: 80%;
+    height: 80%;
+}
+
+a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+}
+
+
+table, th, td {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    /* border: 1px solid rgb(253, 253, 253); */
+    border-collapse: collapse;
+}
+
+table{
+    width: 100%;
+    margin-top: 30px;
+    border-radius: 5px;
+}
+
+th, td {
+    padding: 15px;
+}
+
+th, td {
+    border-bottom: 1px solid rgb(255, 255, 255);
+}
+
+/* nuevo */
+.hoverMenu{
+    color: black;
+    display: none;
+}
+
+.examinar:hover .hoverMenu{
+    color:brown;
+    display: flex;
+}
+
+/* ------------   nuevo ---------*/
+
+.menu {
+    /* display: flex;
+    width: 80%;*/
+    align-self: center;
+    height: fit-content; 
+    font-size: large;
+}
+
+.ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.li {
+    list-style: none;
+    display: block;
+    margin-right: 10px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: white;
+    display: block;
+    padding: 10px;
+}
+
+/* Dropdown */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    padding: 8px;
+    display: none;
+    position: absolute;
+    background-color: rgb(127, 178, 255);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1; /*para mostrar por encima del resto de elementos*/
+    border-radius: 5px;
+}
+
+.dropdown-content li{
+    display: block;
+}
+
+.dropdown-content li:hover{
+    font-weight: bold;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+li a{
+    background-color: rgb(127, 178, 255);
+    border-radius: 3px;
+}
+
+li a:hover{
+    color: rgb(68, 63, 202);
+}
+
+.escondido{
+    display: none;
+}

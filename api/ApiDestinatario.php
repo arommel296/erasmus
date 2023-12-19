@@ -3,8 +3,8 @@ require_once $_SERVER['DOCUMENT_ROOT']."/DEWESE/erasmus/helpers/Autocargar.php";
 $repo = new DestinatarioRepo();
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    if ($_GET['id']) {
-        $id=$_GET['id'];
+    if (isset($_GET['codigoGrupo'])) {
+        $id=$_GET['codigoGrupo'];
         try {
             $resultado = $repo->findById($id);
         } catch (Exception $e) {

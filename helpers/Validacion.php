@@ -1,6 +1,6 @@
 <?php
 // require_once 'autocargar.php';
-require_once $_SERVER['DOCUMENT_ROOT']."/DEWESE/examinator/helpers/Autocargar.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/DEWESE/erasmus/helpers/Autocargar.php";
 
 class Validacion
 {
@@ -11,6 +11,15 @@ class Validacion
     public function __construct()
     {
         $this->errores=array();
+    }
+
+     // Método para obtener los errores
+     public function getErrores() {
+        return $this->errores;
+    }
+
+    public function borrarErrores() {
+        $this->errores = array();
     }
 
     /**
@@ -197,6 +206,72 @@ class Validacion
         }
     }
 
+    public function Fecha($campo) {
+        $fecha = DateTime::createFromFormat('Y-m-d', $_POST[$campo]);
+        if(!$fecha || $fecha->format('Y-m-d') != $_POST[$campo]) {
+            $this->errores[$campo] = "El campo $campo debe ser una fecha válida en formato 'Y-m-d'";
+            return false;
+        }
+        return true;
+    }
+    
+    public function FechaAntesQue($campo1, $campo2) {
+        $fecha1 = DateTime::createFromFormat('Y-m-d', $_POST[$campo1]);
+        $fecha2 = DateTime::createFromFormat('Y-m-d', $_POST[$campo2]);
+    
+        if(!$fecha1 || $fecha1->format('Y-m-d') != $_POST[$campo1]) {
+            $this->errores[$campo1] = "El campo $campo1 debe ser una fecha válida en formato 'Y-m-d'";
+            return false;
+        }
+    
+        if(!$fecha2 || $fecha2->format('Y-m-d') != $_POST[$campo2]) {
+            $this->errores[$campo2] = "El campo $campo2 debe ser una fecha válida en formato 'Y-m-d'";
+            return false;
+        }
+    
+        if($fecha1 > $fecha2) {
+            $this->errores[$campo1] = "La fecha en el campo $campo1 no puede ser después de la fecha en el campo $campo2";
+            return false;
+        }
+    
+        return true;
+    }
+    
+    
+    
+
+    public function validarCampo($campo, $tipos, $min=PHP_INT_MIN, $max=PHP_INT_MAX, $campo2=null) {
+        foreach($tipos as $tipo) {
+            switch($tipo) {
+                case 'requerido':
+                    if(!$this->Requerido($campo)) return false;
+                    break;
+                case 'entero':
+                    if(!$this->EnteroRango($campo, $min, $max)) return false;
+                    break;
+                case 'email':
+                    if(!$this->Email($campo)) return false;
+                    break;
+                case 'cadena':
+                    if(!$this->CadenaRango($campo, $min, $max)) return false;
+                    break;
+                case 'fecha':
+                    if(!$this->Fecha($campo)) return false;
+                    break;
+                case 'fechaAntesQue':
+                    if(!$this->FechaAntesQue($campo, $campo2)) return false;
+                    break;
+                default:
+                    $this->errores[$campo] = "Tipo de validación desconocido: $tipo";
+                    return false;
+            }
+        }
+        return true;
+    }
+    
+
+
 }
+
 
 

@@ -6,6 +6,143 @@ window.addEventListener("load", function () {
 
     btnCapturar.addEventListener("click", capturar);
 
+    //Cuando se introduzca una fecha se comprueba la edad
+    var fnac = document.getElementById("fechaNac");
+    console.log(fnac);
+    fnac.addEventListener("change", function () {
+        //variables a deshabilitar si es mayor de edad:
+        var dniTutor = document.getElementById("dniTutor");
+        var nombreTutor = document.getElementById("nombreTutor");
+        var apellidosTutor = document.getElementById("apellidosTutor");
+        var telefonoTutor = document.getElementById("telefonoTutor");
+        var domicilioTutor = document.getElementById("domicilioTutor");
+        let array = [dniTutor, nombreTutor, apellidosTutor, telefonoTutor, domicilioTutor];
+
+        console.log(fnac.value);
+        if (esMayorDeEdad(fnac.value)) {
+            array.forEach(element => {
+                element.setAttribute('data-valida', 'relleno');
+            });
+            limpiaCampos(array);
+            deshabilita(array);
+        } else{
+            habilita(array);
+        }
+    })
+
+    //Cogemos el id de la convocatoria que se va a solicitar de la url
+    var urlParams = window.location.search;
+    var idConvocatoria = urlParams.split('idConvocatoria=')[1];
+
+    //Insertamos el id de convocatoria en el campo invisible id
+    var id = document.getElementById("id");
+    id.setAttribute("value", idConvocatoria);
+    console.log(id);
+
+    var items = document.getElementById("items");
+    //Hacemos una llamada ayax al servidor para saber el número de archivos requeridos para esta convocatoria
+    fetch('http://localhost/DEWESE/erasmus/api/ApiConvocatoriaBaremo.php?idConvocatoria='+idConvocatoria)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                data.forEach(item => {
+                    var fila = document.createElement("div");
+                    fila.innerHTML='<div class="fila">'+
+                    '<div class="campo">'+
+                    '<label for="'+item.id+'">'+item.nombre+':</label>'+
+                    '<input type="file" id="'+item.id+'" name="'+item.nombre+'">'+
+                    '</div>'+
+                    '</div>';
+                    items.appendChild(fila);
+                })
+            })
+            .catch(error => console.error('Error:', error));
+
+
+    //Recogida de datos de la solicitud:
+    var enviar = document.querySelector('input[type="submit"]');
+    enviar.addEventListener("click", function (event) {
+        event.preventDefault();
+        
+        // Crear un objeto para almacenar los datos del formulario
+        let formData = {};
+
+        // Recoger los datos del solicitante
+        formData.idConvocatoria = document.getElementById('id').value;
+        formData.dni = document.getElementById('dni').value;
+        formData.nombre = document.getElementById('nombre').value;
+        formData.apellidos = document.getElementById('apellidos').value;
+        formData.curso = document.getElementById('curso').value;
+        formData.telefono = document.getElementById('telefono').value;
+        formData.correo = document.getElementById('correo').value;
+        formData.fechaNac = document.getElementById('fechaNac').value;
+        formData.domicilio = document.getElementById('domicilio').value;
+
+        // Recoger los datos del tutor legal
+        formData.dniTutor = document.getElementById('dniTutor').value;
+        formData.nombreTutor = document.getElementById('nombreTutor').value;
+        formData.apellidosTutor = document.getElementById('apellidosTutor').value;
+        formData.telefonoTutor = document.getElementById('telefonoTutor').value;
+        formData.domicilioTutor = document.getElementById('domicilioTutor').value;
+
+        // Recoger la contraseña
+        formData.pass = document.getElementById('pass1').value;
+        // formData.pass2 = document.getElementById('pass2').value;
+
+        // Recoger la imagen
+        let imagen = document.getElementById('foto').src;
+        console.log(imagen);
+        formData.imagen = imagen;
+
+        // Ahora, formData contiene todos los datos del formulario
+        console.log(formData);
+
+        fetch('http://localhost/DEWESE/erasmus/api/ApiSolicitud.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())  // convertir a texto en lugar de JSON
+        .then(data => {
+            console.log(data);  // imprimir los datos en texto
+            return JSON.parse(data);  // luego intentar parsear a JSON
+        })
+        .then(json => console.log(json))  // imprimir los datos en formato JSON
+        .catch(error => console.error('Error:', error));
+
+    })
+
+
+    //Habilitar el botón de quitar foto si se ha realizado captura:
+    var quitar = document.getElementById("quitar");
+    let img = document.getElementById('foto');
+    var imagen = document.getElementById("imagen");
+
+    // Comprueba si hay una imagen cargada cuando se selecciona un archivo
+    imagen.addEventListener("change", function () {
+        if (imagen.files.length > 0) {
+            deshabilita([btnCapturar]);
+            img.src = URL.createObjectURL(imagen.files[0]);
+            img.style.display="block";
+        } else {
+            habilita([btnCapturar]);
+            img.src="";
+            img.style.display="none";
+        }
+    })
+
+
+    // Descarta la foto y habilita el input
+    quitar.addEventListener("click", function (ev) {
+        ev.preventDefault();
+        img.src = "";
+        img.alt = "";
+        img.style.display = "none";
+        habilita([imagen]);
+        deshabilita([quitar]);
+        // quitar.disabled = true;
+    })
+
+
 })
 
 
@@ -50,6 +187,10 @@ function capturar(ev) {
         document.body.removeChild(modal);
         document.body.removeChild(visualizador);
         document.body.removeChild(this);
+        //Parar la webcam
+        player.srcObject.getTracks().forEach(function (track) {
+            track.stop();
+        })
     }
 
     var player = document.createElement('video');
@@ -59,26 +200,26 @@ function capturar(ev) {
     player.style.zIndex = 102;
     player.autoplay = true;
 
-    var captureButton = document.createElement('button');
-    captureButton.id = 'capture';
-    captureButton.innerText = 'Capturar';
-    captureButton.style.zIndex = 102;
+    var capturaButton = document.createElement('button');
+    capturaButton.id = 'captura';
+    capturaButton.innerText = 'Capturar';
+    capturaButton.style.zIndex = 102;
 
     visualizador.appendChild(player);
-    visualizador.appendChild(captureButton);
+    visualizador.appendChild(capturaButton);
 
     player.style.position = 'absolute';
     player.style.top = '100px';
     player.style.left = '50px';
 
-    captureButton.style.position = 'absolute';
-    captureButton.style.bottom = '5px';
-    captureButton.style.right = '5px';
+    capturaButton.style.position = 'absolute';
+    capturaButton.style.bottom = '5px';
+    capturaButton.style.right = '5px';
 
     const canvas = document.createElement('canvas');
     canvas.id = 'canvas';
-    canvas.width = "448px"; // Establece el ancho del canvas igual al ancho del video
-    canvas.height = "337px"; // Establece el alto del canvas igual al alto del video
+    canvas.width = "448px";
+    canvas.height = "337px";
     const context = canvas.getContext('2d');
     // canvas.width = player.width; // Establece el ancho del canvas igual al ancho del video
     // canvas.height = player.height; // Establece el alto del canvas igual al alto del video
@@ -97,27 +238,73 @@ function capturar(ev) {
 
     });
 
-    captureButton.addEventListener('click', () => {
-        // Draw the video frame to the canvas.
+    capturaButton.addEventListener('click', () => {
+        // Pinta la imagen de la cámara en el canvas.
         context.drawImage(player, 0, 0, canvas.width, canvas.height);
-        // Aquí puedes crear tu objeto Recuadro y usarlo para recortar la imagen.
         var recuadro = new Recuadro(0, 0, canvas.width, canvas.height, canvas);
         var imagenRecortada = recuadro.recortar();
 
         imagenRecortada.style.position = 'absolute';
         imagenRecortada.style.top = '100px';
-        imagenRecortada.style.right = '50px';
+        imagenRecortada.style.right = '133px';
         imagenRecortada.style.width = player.style.width - 136;
         imagenRecortada.style.height = player.style.height;
         // imagenRecortada.style.width = 448;
         // imagenRecortada.style.height = 337;
         visualizador.appendChild(imagenRecortada);
 
-        let fotillo = document.getElementById("canv").toDataURL('image/png') ;
+        let fotillo = document.getElementById("canv").toDataURL('image/png');
         localStorage.setItem('imagen', fotillo);
         let img = document.getElementById('foto');
         img.src = localStorage.getItem('imagen');
 
+        img.style.display = "block";
+
+        var fileImagen = document.getElementById("imagen");
+        var descartar = document.getElementById("quitar");
+        let array = [fileImagen];
+        deshabilita(array);
+        habilita([descartar]);
+
     });
 
+
+
+}
+
+// Función para saber si es mayor de edad con la fecha introducida
+function esMayorDeEdad(fecha) {
+    console.log(fecha);
+    var hoy = new Date();
+    var cumpleanos = new Date(fecha);
+    var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+    var m = hoy.getMonth() - cumpleanos.getMonth();
+
+    if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+        edad--;
+    }
+
+    return edad >= 18;
+}
+
+
+//Función a la que se le pasa un array de los elementos html que queremos deshabilitar
+function deshabilita(array) {
+    array.forEach(element => {
+        element.disabled = true;
+    });
+}
+
+//Función a la que se le pasa un array de los elementos html que queremos habilitar
+function habilita(array) {
+    array.forEach(element => {
+        element.disabled = false;
+    });
+}
+
+//Función a la que se le pasa un array de los elementos html que queremos limpiar
+function limpiaCampos(array) {
+    array.forEach(element => {
+        element.value = "";
+    })
 }
