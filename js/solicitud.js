@@ -48,12 +48,70 @@ window.addEventListener("load", function () {
                 data.forEach(item => {
                     var fila = document.createElement("div");
                     fila.innerHTML='<div class="fila">'+
-                    '<div class="campo">'+
+                    '<class="campo">'+
                     '<label for="'+item.id+'">'+item.nombre+':</label>'+
                     '<input type="file" id="'+item.id+'" name="'+item.nombre+'">'+
+                    '<button class="verPdf">Previsualización</button>'+
                     '</div>'+
                     '</div>';
                     items.appendChild(fila);
+
+                    // Agrega un controlador de eventos al botón de previsualización
+                    fila.querySelector('.verPdf').addEventListener('click', function(ev) {
+                        ev.preventDefault();
+                        // el archivo del input
+                        let file = document.getElementById(item.id).files[0];
+
+                        if (file.type == "application/pdf") {
+                            var iframe = document.createElement("iframe");
+                            iframe.style.width = "100%";
+                            iframe.style.height = "100%";
+                            //modal
+                            var modal = document.createElement("div");
+                            modal.style.position = "fixed";
+                            modal.style.left = "0";
+                            modal.style.top = "0";
+                            modal.style.width = "100%";
+                            modal.style.height = "100%";
+                            modal.style.backgroundColor = "rgba(0,0,0,0.5)";
+                            modal.style.zIndex = 99;
+                            document.body.appendChild(modal);
+                
+                            //visualizador
+                            var visualizador = document.createElement("div");
+                            visualizador.style.position = "fixed";
+                            visualizador.style.left = "15%";
+                            visualizador.style.top = "15%";
+                            visualizador.style.width = "70%";
+                            visualizador.style.height = "70%";
+                            visualizador.style.backgroundColor = "white";
+                            visualizador.style.zIndex = 100;
+                            document.body.appendChild(visualizador);
+                            visualizador.appendChild(iframe);
+                
+                            var closer = document.createElement("span");
+                            closer.innerHTML = "X";
+                            closer.style.padding = "0.6em"
+                            closer.style.position = "fixed";
+                            closer.style.top = "0";
+                            closer.style.right = "0";
+                            closer.style.backgroundColor = "white";
+                            closer.style.zIndex = 101;
+                            document.body.appendChild(closer);
+                
+                            closer.onclick = function () {
+                                document.body.removeChild(modal);
+                                document.body.removeChild(visualizador);
+                                document.body.removeChild(this);
+                            }
+                
+
+                
+                            iframe.src=URL.createObjectURL(file)
+                        }
+
+                    })
+
                 })
             })
             .catch(error => console.error('Error:', error));
